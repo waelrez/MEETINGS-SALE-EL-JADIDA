@@ -1,0 +1,483 @@
+
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101827">
+<title>MEETINGS SALÉ EL JADIDA</title>
+<style>
+:root{
+ --bg:#0b1220;--panel:#121e30;--panel2:#19283c;--line:#293b52;
+ --text:#f3f6fc;--muted:#9aabc0;--accent:#32d6a0;--blue:#48a9ff;
+ --red:#ff647c;--radius:18px
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+header{height:72px;background:#101a2a;border-bottom:1px solid var(--line);
+ display:flex;align-items:center;justify-content:space-between;padding:0 5%;
+ position:sticky;top:0;z-index:10}
+.brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:1px}
+.logo{width:42px;height:42px;border-radius:13px;background:var(--accent);color:#071a18;
+ display:grid;place-items:center;font-size:22px;font-weight:900}
+.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:2px;margin-top:4px}
+.header-actions{display:flex;gap:9px;align-items:center}
+.btn{border:0;border-radius:10px;padding:11px 15px;font-weight:700}
+.primary{background:var(--accent);color:#071a18}
+.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+.danger{background:#542333;color:#ff9caf}
+nav{display:flex;gap:8px;padding:15px 5%;overflow-x:auto;border-bottom:1px solid var(--line)}
+nav button{background:transparent;color:var(--muted);border:0;padding:10px 14px;
+ border-radius:9px;white-space:nowrap}
+nav button.active,nav button:hover{background:var(--panel2);color:var(--accent)}
+main{max-width:1250px;margin:auto;padding:25px 5% 70px}
+.hero{background:linear-gradient(115deg,#183d42,#14283c 55%,#18243b);
+ border:1px solid #31535c;border-radius:24px;padding:35px;position:relative;overflow:hidden}
+.hero:after{content:"🛴";position:absolute;font-size:130px;right:7%;top:25px;opacity:.15}
+.hero h1{font-size:clamp(28px,5vw,48px);margin:10px 0}
+.hero p{color:#c0d2dc;max-width:600px;line-height:1.7}
+.eyebrow{color:var(--accent);font-size:12px;font-weight:900;letter-spacing:2px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:20px 0}
+.stat,.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:19px}
+.stat span{color:var(--muted);font-size:13px}
+.stat strong{display:block;font-size:27px;margin-top:10px}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:28px 0 15px}
+.section-head h2{margin:0;font-size:21px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.meeting{background:var(--panel);border:1px solid var(--line);border-radius:17px;overflow:hidden}
+.meeting-cover{height:110px;background:linear-gradient(120deg,#1c655c,#24466b);
+ display:flex;align-items:center;justify-content:center;font-size:48px}
+.meeting-body{padding:17px}
+.meeting h3{margin:0 0 12px}
+.meta{color:var(--muted);font-size:13px;line-height:1.9}
+.tag{display:inline-block;background:#193b35;color:var(--accent);padding:5px 9px;
+ border-radius:20px;font-size:11px;margin-bottom:10px}
+.meeting-actions{display:flex;gap:8px;margin-top:15px;flex-wrap:wrap}
+.meeting-actions button{flex:1}
+.page{display:none}.page.active{display:block}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field.full{grid-column:1/-1}
+label{color:var(--muted);font-size:13px}
+input,select,textarea{width:100%;padding:13px;background:#0c1726;border:1px solid var(--line);
+ border-radius:10px;color:var(--text);outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+textarea{min-height:90px;resize:vertical}
+.actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.empty{text-align:center;padding:35px;color:var(--muted);background:var(--panel);
+ border-radius:15px;border:1px dashed var(--line)}
+.profile-layout{display:grid;grid-template-columns:1fr 2fr;gap:15px}
+.avatar{width:75px;height:75px;border-radius:50%;background:#234b50;
+ display:grid;place-items:center;font-size:32px;margin-bottom:15px}
+.person{padding:13px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.gallery img{width:100%;height:180px;object-fit:cover;border-radius:12px}
+.notice{padding:13px;background:#172c36;border:1px solid #285448;color:#b5f5dd;
+ border-radius:12px;margin:15px 0;font-size:13px;line-height:1.6}
+footer{text-align:center;padding:25px;color:var(--muted);border-top:1px solid var(--line)}
+.modal{display:none;position:fixed;inset:0;background:#000b;z-index:30;
+ align-items:center;justify-content:center;padding:15px}
+.modal.open{display:flex}
+.modal-box{width:min(600px,100%);max-height:90vh;overflow:auto;background:var(--panel);
+ border:1px solid var(--line);border-radius:18px;padding:22px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+ background:var(--accent);color:#071a18;padding:13px 20px;border-radius:12px;
+ font-weight:bold;display:none;z-index:50}
+.small{font-size:12px;color:var(--muted)}
+[dir=rtl] .hero:after{right:auto;left:7%}
+[dir=rtl] body{text-align:right}
+@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:580px){header{padding:0 4%;height:65px}.brand{font-size:12px}
+ .brand small{font-size:8px}main{padding:18px 4% 50px}.hero{padding:23px}
+ .grid,.form-grid,.profile-layout{grid-template-columns:1fr}.gallery{grid-template-columns:1fr 1fr}
+ .section-head{align-items:flex-start;flex-direction:column}.header-actions .btn{padding:9px}
+ .hero:after{font-size:85px;right:0;top:5px}}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="brand">
+  <div class="logo">M</div>
+  <div>MEETINGS SALÉ EL JADIDA<small>RIDE TOGETHER • MEET TOGETHER</small></div>
+ </div>
+ <div class="header-actions">
+  <button class="btn secondary" onclick="toggleLang()" id="langBtn">العربية</button>
+ </div>
+</header>
+
+<nav id="navigation">
+ <button class="active" data-page="home" data-i="navHome">Accueil</button>
+ <button data-page="meetings" data-i="navMeetings">Rencontres</button>
+ <button data-page="create" data-i="navCreate">Créer une rencontre</button>
+ <button data-page="members" data-i="navMembers">Membres</button>
+ <button data-page="profile" data-i="navProfile">Mon profil</button>
+ <button data-page="gallery" data-i="navGallery">Galerie</button>
+</nav>
+
+<main>
+<section class="page active" id="home">
+ <div class="hero">
+  <div class="eyebrow" data-i="welcome">LA COMMUNAUTÉ DES RIDERS</div>
+  <h1>MEETINGS<br>SALÉ EL JADIDA</h1>
+  <p data-i="heroText">Rejoignez les passionnés de trottinettes électriques. Organisez des sorties, rencontrez des riders et partagez votre passion.</p>
+  <button class="btn primary" onclick="showPage('meetings')" data-i="discover">Découvrir les rencontres →</button>
+  <button class="btn secondary" onclick="showPage('create')" data-i="organize">Organiser une sortie</button>
+ </div>
+ <div class="stats">
+  <div class="stat"><span data-i="totalMeetings">Rencontres</span><strong id="statMeetings">0</strong></div>
+  <div class="stat"><span data-i="totalMembers">Membres</span><strong id="statMembers">0</strong></div>
+  <div class="stat"><span data-i="totalJoined">Participations</span><strong id="statJoined">0</strong></div>
+  <div class="stat"><span data-i="totalPhotos">Photos</span><strong id="statPhotos">0</strong></div>
+ </div>
+ <div class="section-head"><h2 data-i="upcoming">Prochaines rencontres</h2>
+ <button class="btn secondary" onclick="showPage('meetings')" data-i="seeAll">Tout voir</button></div>
+ <div class="grid" id="homeMeetings"></div>
+ <div class="notice" data-i="localNotice">ℹ️ Les informations sont enregistrées localement dans ce navigateur. Pour partager les données avec tous les membres sur Internet, une base de données et un serveur seront nécessaires.</div>
+</section>
+
+<section class="page" id="meetings">
+ <div class="section-head"><h2 data-i="allMeetings">Toutes les rencontres</h2>
+ <button class="btn primary" onclick="showPage('create')" data-i="newMeeting">+ Nouvelle rencontre</button></div>
+ <div class="grid" id="allMeetings"></div>
+</section>
+
+<section class="page" id="create">
+ <div class="section-head"><h2 data-i="createTitle">Organiser une rencontre</h2></div>
+ <div class="card">
+  <form id="meetingForm">
+   <div class="form-grid">
+    <div class="field full"><label data-i="meetingName">Nom de la rencontre</label><input name="title" required maxlength="70" placeholder="Ex: Weekend Ride"></div>
+    <div class="field"><label data-i="date">Date</label><input name="date" type="date" required></div>
+    <div class="field"><label data-i="time">Heure</label><input name="time" type="time" required></div>
+    <div class="field"><label data-i="city">Ville / Zone</label><input name="city" required placeholder="Salé El Jadida"></div>
+    <div class="field"><label data-i="meetingPoint">Lieu de rendez-vous</label><input name="place" required></div>
+    <div class="field"><label data-i="captain">Organisateur / Captain</label><input name="captain" required></div>
+    <div class="field"><label data-i="limit">Nombre maximum de participants</label><input name="limit" type="number" min="2" max="500" value="30"></div>
+    <div class="field full"><label data-i="description">Description</label><textarea name="description"></textarea></div>
+   </div>
+   <div class="actions"><button class="btn primary" type="submit" data-i="publish">Publier la rencontre</button></div>
+  </form>
+ </div>
+</section>
+
+<section class="page" id="members">
+ <div class="section-head"><h2 data-i="membersTitle">Communauté des riders</h2></div>
+ <div class="card">
+  <div class="form-grid">
+   <div class="field"><label data-i="searchMember">Rechercher un membre</label><input id="memberSearch" placeholder="Nom..."></div>
+   <div class="field"><label data-i="filterScooter">Filtrer par trottinette</label>
+    <select id="scooterFilter"><option value="">Tous les modèles</option>
+     <option>Segway Ninebot</option><option>Xiaomi</option><option>Kukirin</option>
+     <option>EcoXtrem</option><option>Dualtron</option><option>Autre</option>
+    </select>
+   </div>
+  </div>
+  <div id="memberList"></div>
+ </div>
+</section>
+
+<section class="page" id="profile">
+ <div class="section-head"><h2 data-i="profileTitle">Mon profil rider</h2></div>
+ <div class="profile-layout">
+  <div class="card">
+   <div class="avatar">🛴</div>
+   <h2 id="profileName">Rider</h2>
+   <p class="small" data-i="profileSubtitle">Profil de la communauté</p>
+   <p id="profileSummary" class="meta"></p>
+  </div>
+  <div class="card">
+   <form id="profileForm">
+    <div class="form-grid">
+     <div class="field"><label data-i="fullName">Nom / Pseudo</label><input name="name" required maxlength="40"></div>
+     <div class="field"><label data-i="age">Âge (facultatif)</label><input name="age" type="number" min="1" max="110"></div>
+     <div class="field"><label data-i="scooter">Trottinette</label>
+      <select name="scooter"><option>Segway Ninebot</option><option>Xiaomi</option><option>Kukirin</option><option>EcoXtrem</option><option>Dualtron</option><option>Autre</option></select>
+     </div>
+     <div class="field"><label data-i="model">Modèle exact</label><input name="model" placeholder="Ex: G2 Max"></div>
+     <div class="field"><label data-i="city">Ville</label><input name="city" value="Salé El Jadida"></div>
+     <div class="field"><label data-i="phone">Contact (facultatif)</label><input name="phone" placeholder="Téléphone"></div>
+     <div class="field full"><label data-i="bio">Présentation</label><textarea name="bio"></textarea></div>
+    </div>
+    <div class="actions"><button class="btn primary" type="submit" data-i="saveProfile">Enregistrer mon profil</button></div>
+   </form>
+  </div>
+ </div>
+</section>
+
+<section class="page" id="gallery">
+ <div class="section-head"><h2 data-i="galleryTitle">Galerie communautaire</h2></div>
+ <div class="card">
+  <div class="field"><label data-i="addPhoto">Ajouter une photo depuis votre appareil</label>
+   <input type="file" id="photoInput" accept="image/*" multiple>
+  </div>
+  <p class="small" data-i="photoLimit">Les photos sont conservées dans ce navigateur. Évitez les images trop volumineuses.</p>
+ </div>
+ <div class="gallery" id="photoGallery" style="margin-top:17px"></div>
+</section>
+</main>
+
+<footer>MEETINGS SALÉ EL JADIDA © <span id="year"></span><br>
+<span class="small">COMMUNITY • RESPECT • SAFETY</span></footer>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+ <div class="modal-box" id="modalContent"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const translations={
+ fr:{
+ navHome:"Accueil",navMeetings:"Rencontres",navCreate:"Créer une rencontre",
+ navMembers:"Membres",navProfile:"Mon profil",navGallery:"Galerie",
+ welcome:"LA COMMUNAUTÉ DES RIDERS",
+ heroText:"Rejoignez les passionnés de trottinettes électriques. Organisez des sorties, rencontrez des riders et partagez votre passion.",
+ discover:"Découvrir les rencontres →",organize:"Organiser une sortie",
+ totalMeetings:"Rencontres",totalMembers:"Membres",totalJoined:"Participations",totalPhotos:"Photos",
+ upcoming:"Prochaines rencontres",seeAll:"Tout voir",localNotice:"ℹ️ Les informations sont enregistrées localement dans ce navigateur. Pour partager les données avec tous les membres sur Internet, une base de données et un serveur seront nécessaires.",
+ allMeetings:"Toutes les rencontres",newMeeting:"+ Nouvelle rencontre",createTitle:"Organiser une rencontre",
+ meetingName:"Nom de la rencontre",date:"Date",time:"Heure",city:"Ville / Zone",
+ meetingPoint:"Lieu de rendez-vous",captain:"Organisateur / Captain",limit:"Nombre maximum de participants",
+ description:"Description",publish:"Publier la rencontre",membersTitle:"Communauté des riders",
+ searchMember:"Rechercher un membre",filterScooter:"Filtrer par trottinette",profileTitle:"Mon profil rider",
+ profileSubtitle:"Profil de la communauté",fullName:"Nom / Pseudo",age:"Âge (facultatif)",
+ scooter:"Trottinette",model:"Modèle exact",phone:"Contact (facultatif)",bio:"Présentation",
+ saveProfile:"Enregistrer mon profil",galleryTitle:"Galerie communautaire",addPhoto:"Ajouter une photo depuis votre appareil",
+ photoLimit:"Les photos sont conservées dans ce navigateur. Évitez les images trop volumineuses.",
+ join:"Participer",joined:"Inscrit",participants:"participants",openMap:"Voir le lieu sur la carte",
+ noMeetings:"Aucune rencontre pour le moment.",noMembers:"Aucun membre inscrit.",
+ noPhotos:"Aucune photo pour le moment.",created:"Rencontre publiée !",joinedMsg:"Participation enregistrée !",
+ leave:"Annuler ma participation",cancelled:"Participation annulée.",delete:"Supprimer",
+ confirmDelete:"Supprimer cette rencontre ?",details:"Détails",organizer:"Organisateur",
+ location:"Lieu",status:"Statut",upcomingStatus:"À venir",pastStatus:"Terminée",
+ member:"Membre",scooterLabel:"Trottinette",noProfile:"Complétez votre profil pour participer.",
+ saved:"Profil enregistré !",photoAdded:"Photo(s) ajoutée(s) !",photoError:"Stockage insuffisant. Réduisez la taille des photos.",
+ gps:"Ma position GPS",gpsError:"Impossible d'obtenir votre position.",
+ close:"Fermer",descriptionEmpty:"Pas de description.",full:"Complet",spots:"Places",
+ ageLabel:"Âge",contact:"Contact",removePhoto:"Supprimer"
+ },
+ ar:{
+ navHome:"الرئيسية",navMeetings:"اللقاءات",navCreate:"إنشاء لقاء",
+ navMembers:"الأعضاء",navProfile:"ملفي الشخصي",navGallery:"معرض الصور",
+ welcome:"مجتمع عشاق السكوتر الكهربائي",
+ heroText:"انضم إلى عشاق السكوتر الكهربائي. نظّم الجولات، تعرّف على أعضاء جدد وشارك شغفك.",
+ discover:"اكتشف اللقاءات ←",organize:"نظّم جولة",
+ totalMeetings:"اللقاءات",totalMembers:"الأعضاء",totalJoined:"المشاركات",totalPhotos:"الصور",
+ upcoming:"اللقاءات القادمة",seeAll:"عرض الكل",localNotice:"ℹ️ يتم حفظ المعلومات محلياً في هذا المتصفح. لمشاركة البيانات بين جميع الأعضاء عبر الإنترنت نحتاج إلى قاعدة بيانات وخادم.",
+ allMeetings:"جميع اللقاءات",newMeeting:"+ لقاء جديد",createTitle:"تنظيم لقاء جديد",
+ meetingName:"اسم اللقاء",date:"التاريخ",time:"الساعة",city:"المدينة / المنطقة",
+ meetingPoint:"مكان التجمع",captain:"المنظم / Captain",limit:"الحد الأقصى للمشاركين",
+ description:"الوصف",publish:"نشر اللقاء",membersTitle:"مجتمع السائقين",
+ searchMember:"البحث عن عضو",filterScooter:"البحث حسب السكوتر",profileTitle:"ملفي الشخصي",
+ profileSubtitle:"ملفك في المجتمع",fullName:"الاسم / اللقب",age:"العمر (اختياري)",
+ scooter:"نوع السكوتر",model:"الموديل",phone:"رقم التواصل (اختياري)",bio:"نبذة عنك",
+ saveProfile:"حفظ الملف الشخصي",galleryTitle:"معرض صور المجتمع",addPhoto:"إضافة صور من جهازك",
+ photoLimit:"يتم حفظ الصور في هذا المتصفح. يُفضل تجنب الصور ذات الحجم الكبير.",
+ join:"انضمام",joined:"مسجل",participants:"مشارك",openMap:"عرض المكان على الخريطة",
+ noMeetings:"لا توجد لقاءات حالياً.",noMembers:"لا يوجد أعضاء مسجلون.",
+ noPhotos:"لا توجد صور حالياً.",created:"تم نشر اللقاء!",joinedMsg:"تم تسجيل مشاركتك!",
+ leave:"إلغاء المشاركة",cancelled:"تم إلغاء المشاركة.",delete:"حذف",
+ confirmDelete:"هل تريد حذف هذا اللقاء؟",details:"التفاصيل",organizer:"المنظم",
+ location:"المكان",status:"الحالة",upcomingStatus:"قادم",pastStatus:"منتهٍ",
+ member:"عضو",scooterLabel:"السكوتر",noProfile:"أكمل ملفك الشخصي أولاً للمشاركة.",
+ saved:"تم حفظ الملف الشخصي!",photoAdded:"تمت إضافة الصور!",photoError:"مساحة التخزين غير كافية. قلل حجم الصور.",
+ gps:"موقعي GPS",gpsError:"تعذر تحديد موقعك.",
+ close:"إغلاق",descriptionEmpty:"لا يوجد وصف.",full:"مكتمل",spots:"الأماكن",
+ ageLabel:"العمر",contact:"التواصل",removePhoto:"حذف"
+ }
+};
+
+let lang=localStorage.getItem("msj_lang")||"fr";
+let db;
+try{
+ db=JSON.parse(localStorage.getItem("msj_database"))||{};
+}catch(e){db={}}
+db.meetings=db.meetings||[];
+db.members=db.members||[];
+db.photos=db.photos||[];
+db.profile=db.profile||null;
+
+function save(){
+ try{localStorage.setItem("msj_database",JSON.stringify(db));return true}
+ catch(e){toast(T().photoError);return false}
+}
+function T(){return translations[lang]}
+function tr(key){return T()[key]||key}
+function toggleLang(){
+ lang=lang==="fr"?"ar":"fr";
+ localStorage.setItem("msj_lang",lang);
+ applyLang();render();
+}
+function applyLang(){
+ document.documentElement.lang=lang;
+ document.documentElement.dir=lang==="ar"?"rtl":"ltr";
+ document.getElementById("langBtn").textContent=lang==="fr"?"العربية":"Français";
+ document.querySelectorAll("[data-i]").forEach(el=>{
+  el.textContent=tr(el.dataset.i);
+ });
+}
+function showPage(id){
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+ if(id==="profile")fillProfile();
+ render();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+
+function toast(message){
+ const el=document.getElementById("toast");
+ el.textContent=message;el.style.display="block";
+ clearTimeout(window.toastTimer);
+ window.toastTimer=setTimeout(()=>el.style.display="none",2600);
+}
+function escapeHTML(value){
+ return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function dateText(date){
+ if(!date)return "";
+ return new Date(date+"T12:00:00").toLocaleDateString(lang==="ar"?"ar-MA":"fr-FR");
+}
+function getProfile(){
+ return db.profile;
+}
+function meetingCard(m){
+ const joined=m.participants.includes(db.profile?.name);
+ const full=m.participants.length>=Number(m.limit||30);
+ const datePast=m.date < new Date().toISOString().slice(0,10);
+ return `<article class="meeting">
+ <div class="meeting-cover">🛴</div><div class="meeting-body">
+ <span class="tag">${datePast?tr("pastStatus"):tr("upcomingStatus")}</span>
+ <h3>${escapeHTML(m.title)}</h3>
+ <div class="meta">📅 ${dateText(m.date)} • ⏰ ${escapeHTML(m.time)}<br>
+ 📍 ${escapeHTML(m.city)}<br>🗺️ ${escapeHTML(m.place)}<br>
+ 👤 ${tr("organizer")}: ${escapeHTML(m.captain)}<br>
+ 👥 ${m.participants.length} / ${m.limit} ${tr("participants")}</div>
+ <div class="meeting-actions">
+ <button class="btn secondary" onclick="details('${m.id}')">${tr("details")}</button>
+ ${joined?`<button class="btn danger" onclick="leaveMeeting('${m.id}')">${tr("leave")}</button>`:
+ `<button class="btn primary" ${full||datePast?"disabled":""} onclick="joinMeeting('${m.id}')">${full?tr("full"):tr("join")}</button>`}
+ </div></div></article>`;
+}
+function renderMeetings(){
+ const sorted=[...db.meetings].sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+ const html=sorted.map(meetingCard).join("")||`<div class="empty">${tr("noMeetings")}</div>`;
+ document.getElementById("allMeetings").innerHTML=html;
+ document.getElementById("homeMeetings").innerHTML=sorted.slice(0,3).map(meetingCard).join("")||`<div class="empty">${tr("noMeetings")}</div>`;
+}
+function renderMembers(){
+ const search=(document.getElementById("memberSearch")?.value||"").toLowerCase();
+ const filter=document.getElementById("scooterFilter")?.value||"";
+ const list=db.members.filter(m=>(m.name||"").toLowerCase().includes(search)&&(!filter||m.scooter===filter));
+ document.getElementById("memberList").innerHTML=list.map(m=>`
+ <div class="person"><div><strong>👤 ${escapeHTML(m.name)}</strong>
+ <div class="small">${escapeHTML(m.scooter||"")} ${escapeHTML(m.model||"")} • ${escapeHTML(m.city||"")}</div>
+ </div><span class="small">${tr("member")}</span></div>`).join("")||`<div class="empty">${tr("noMembers")}</div>`;
+}
+function renderGallery(){
+ document.getElementById("photoGallery").innerHTML=db.photos.map((p,i)=>
+ `<div><img src="${p.data}" alt="Meeting photo"><button class="btn danger" style="width:100%;margin-top:5px" onclick="deletePhoto(${i})">${tr("removePhoto")}</button></div>`
+ ).join("")||`<div class="empty" style="grid-column:1/-1">${tr("noPhotos")}</div>`;
+}
+function renderStats(){
+ document.getElementById("statMeetings").textContent=db.meetings.length;
+ document.getElementById("statMembers").textContent=db.members.length;
+ document.getElementById("statJoined").textContent=db.meetings.reduce((n,m)=>n+m.participants.length,0);
+ document.getElementById("statPhotos").textContent=db.photos.length;
+}
+function render(){
+ renderMeetings();renderMembers();renderGallery();renderStats();
+}
+document.getElementById("meetingForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ const f=new FormData(e.target);
+ const m={
+ id:Date.now().toString(),title:f.get("title"),date:f.get("date"),time:f.get("time"),
+ city:f.get("city"),place:f.get("place"),captain:f.get("captain"),
+ limit:Number(f.get("limit"))||30,description:f.get("description"),participants:[]
+ };
+ db.meetings.push(m);save();e.target.reset();toast(tr("created"));showPage("meetings");
+});
+function joinMeeting(id){
+ if(!db.profile?.name){toast(tr("noProfile"));showPage("profile");return}
+ const m=db.meetings.find(x=>x.id===id);if(!m)return;
+ if(m.participants.includes(db.profile.name))return;
+ if(m.participants.length>=m.limit)return;
+ m.participants.push(db.profile.name);save();render();toast(tr("joinedMsg"));
+}
+function leaveMeeting(id){
+ const m=db.meetings.find(x=>x.id===id);if(!m)return;
+ m.participants=m.participants.filter(n=>n!==db.profile?.name);
+ save();render();toast(tr("cancelled"));
+}
+function details(id){
+ const m=db.meetings.find(x=>x.id===id);if(!m)return;
+ const map="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(m.place+" "+m.city+" Morocco");
+ document.getElementById("modalContent").innerHTML=`
+ <h2>${escapeHTML(m.title)}</h2>
+ <p class="meta">📅 ${dateText(m.date)} • ⏰ ${escapeHTML(m.time)}<br>
+ 📍 ${escapeHTML(m.city)} — ${escapeHTML(m.place)}<br>
+ 👤 ${tr("organizer")}: ${escapeHTML(m.captain)}<br>
+ 👥 ${m.participants.length}/${m.limit} ${tr("participants")}</p>
+ <p>${escapeHTML(m.description||tr("descriptionEmpty"))}</p>
+ <h3>${tr("participants")}</h3>
+ <div>${m.participants.map(n=>`<div class="person">${escapeHTML(n)}</div>`).join("")||"—"}</div>
+ <div class="actions"><button class="btn primary" onclick="window.open('${map}','_blank')">${tr("openMap")}</button>
+ <button class="btn secondary" onclick="closeModal()">${tr("close")}</button>
+ <button class="btn danger" onclick="deleteMeeting('${m.id}')">${tr("delete")}</button></div>`;
+ document.getElementById("modal").classList.add("open");
+}
+function closeModal(){document.getElementById("modal").classList.remove("open")}
+function deleteMeeting(id){
+ if(!confirm(tr("confirmDelete")))return;
+ db.meetings=db.meetings.filter(m=>m.id!==id);save();closeModal();render();
+}
+document.getElementById("profileForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ const f=new FormData(e.target);
+ const oldName=db.profile?.name;
+ db.profile=Object.fromEntries(f.entries());
+ if(oldName&&oldName!==db.profile.name){
+  db.meetings.forEach(m=>m.participants=m.participants.map(n=>n===oldName?db.profile.name:n));
+ }
+ const index=db.members.findIndex(m=>m.name===oldName);
+ if(index>=0)db.members.splice(index,1);
+ db.members=db.members.filter(m=>m.name!==db.profile.name);
+ db.members.push({...db.profile});
+ save();fillProfile();render();toast(tr("saved"));
+});
+function fillProfile(){
+ const f=document.getElementById("profileForm");
+ const p=db.profile;
+ if(!p)return;
+ Object.keys(p).forEach(k=>{if(f.elements[k])f.elements[k].value=p[k]});
+ document.getElementById("profileName").textContent=p.name;
+ document.getElementById("profileSummary").textContent=(p.scooter||"")+" "+(p.model||"")+" • "+(p.city||"");
+}
+document.getElementById("memberSearch").addEventListener("input",renderMembers);
+document.getElementById("scooterFilter").addEventListener("change",renderMembers);
+
+document.getElementById("photoInput").addEventListener("change",async e=>{
+ const files=[...e.target.files];
+ for(const file of files){
+  if(!file.type.startsWith("image/"))continue;
+  if(file.size>900000){toast(tr("photoError"));continue}
+  const data=await new Promise(resolve=>{
+   const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.readAsDataURL(file);
+  });
+  db.photos.push({data});
+  if(!save()){db.photos.pop();break}
+ }
+ renderGallery();renderStats();toast(tr("photoAdded"));e.target.value="";
+});
+function deletePhoto(i){
+ db.photos.splice(i,1);save();renderGallery();renderStats();
+}
+document.getElementById("year").textContent=new Date().getFullYear();
+applyLang();fillProfile();render();
+</script>
+</body>
+</html>
